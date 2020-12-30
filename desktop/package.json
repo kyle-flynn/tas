@@ -15,7 +15,7 @@
     "premain": "webpack --config ./config/webpack.dev.main.config.js",
     "main": "electron ./public/main.js",
     "renderer": "webpack serve --config ./config/webpack.dev.renderer.config.js",
-    "start": "concurrently --kill-others \"npm run main\" \"npm run renderer",
+    "start": "concurrently --kill-others \"npm run main\" \"npm run renderer\"",
     "build": "webpack --config ./config/webpack.prod.config.js"
   },
   "dependencies": {
