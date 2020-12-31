@@ -1,5 +1,7 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import debug from 'electron-debug';
+import ProcessChannel from '../common/ipc/channels/ProcessChannel';
+import TestChannel from '../common/ipc/channels/TestChannel';
 
 const lock: boolean = app.requestSingleInstanceLock();
 let win: BrowserWindow;
@@ -18,6 +20,7 @@ function createWindow() {
   });
 
   // Initialize ipc channels.
+  initIpc([new TestChannel()]);
 
   win.show();
   win.loadURL('http://localhost:9090/');
@@ -28,6 +31,14 @@ function createWindow() {
     // @ts-ignore - Dereference window memory.
     win = null;
   });
+}
+
+function initIpc(channels: ProcessChannel[]) {
+  channels.forEach((channel) =>
+    ipcMain.on(channel.getName(), (event, request) =>
+      channel.handle(event, request)
+    )
+  );
 }
 
 if (!lock) {
