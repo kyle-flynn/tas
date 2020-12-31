@@ -41,7 +41,7 @@ class IpcManager {
           }
         );
         message.setSequence(this.sequence);
-        this.ipcRenderer.send(message.getChannel(), message.getParams());
+        this.ipcRenderer.send(message.getChannel(), message.getBody());
         this.sequence++;
       } catch (e) {
         reject(e);

@@ -5,7 +5,7 @@
 export interface IProcessMessage {
   getChannel(): string;
   getSequence(): number;
-  getParams(): any;
+  getBody(): any;
   setSequence(sequence: number): void;
 }
 
@@ -15,6 +15,7 @@ export interface IProcessMessage {
  */
 export interface IProcessMessageHeader {
   sequence: number;
+  responseChannel: string;
 }
 
 /**
@@ -38,20 +39,37 @@ export default abstract class ProcessMessage implements IProcessMessage {
     this.sequence = -1;
   }
 
+  /**
+   * Returns the channel name of the message.
+   * @returns {string} - Channel name as string.
+   */
   public getChannel(): string {
     return this.channel;
   }
 
+  /**
+   * Returns the message sequence number.
+   * @returns {number} - Sequence number.
+   */
   public getSequence(): number {
     return this.sequence;
   }
 
-  public getParams(): IProcessMessageHeader {
+  /**
+   * Returns the entire header, and body of the message.
+   * @returns {T extends IProcessMessageHeader} - A type that extends IProcessMessageHeader.
+   */
+  public getBody(): IProcessMessageHeader {
     return {
-      sequence: this.getSequence()
+      sequence: this.getSequence(),
+      responseChannel: `${this.getChannel()}-response`
     };
   }
 
+  /**
+   * Sets the sequence number of the message.
+   * @param {number} sequence
+   */
   public setSequence(sequence: number): void {
     this.sequence = sequence;
   }

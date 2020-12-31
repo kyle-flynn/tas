@@ -1,7 +1,9 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import debug from 'electron-debug';
-import ProcessChannel from '../common/ipc/channels/ProcessChannel';
-import TestChannel from '../common/ipc/channels/TestChannel';
+import ProcessChannel, {
+  MessageCallback
+} from '../common/ipc/routes/ProcessRoute';
+import TestRoute from '../common/ipc/routes/TestRoute';
 
 const lock: boolean = app.requestSingleInstanceLock();
 let win: BrowserWindow;
@@ -20,7 +22,7 @@ function createWindow() {
   });
 
   // Initialize ipc channels.
-  initIpc([new TestChannel()]);
+  initIpc([new TestRoute()]);
 
   win.show();
   win.loadURL('http://localhost:9090/');
@@ -34,10 +36,12 @@ function createWindow() {
 }
 
 function initIpc(channels: ProcessChannel[]) {
-  channels.forEach((channel) =>
-    ipcMain.on(channel.getName(), (event, request) =>
-      channel.handle(event, request)
-    )
+  channels.forEach((channel: ProcessChannel) =>
+    channel
+      .getChannels()
+      .forEach((fn: MessageCallback<any>, channelName: string) => {
+        ipcMain.on(channelName, (event, request) => fn(event, request));
+      })
   );
 }
 

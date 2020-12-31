@@ -1,6 +1,6 @@
-export enum Channel {
+export enum Channels {
   TEST = 'test'
 }
 
-export * from './channels';
+export * from './routes';
 export * from './messages';
