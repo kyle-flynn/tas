@@ -1,13 +1,11 @@
 import { IpcRenderer, IpcRendererEvent } from 'electron';
-import {
-  IProcessMessage,
-  IProcessResponse
-} from '../../common/ipc/messages/ProcessMessage';
+import { IProcessMessage, IProcessResponse } from '../../common/ipc';
 
 class IpcManager {
   private static instance: IpcManager;
 
   private ipcRenderer!: IpcRenderer;
+  private sequence: number;
 
   public static getInstance(): IpcManager {
     if (typeof IpcManager.instance === 'undefined') {
@@ -16,7 +14,9 @@ class IpcManager {
     return IpcManager.instance;
   }
 
-  private IpcManager() {}
+  private constructor() {
+    this.sequence = 0;
+  }
 
   private init(): void {
     if (!window || !window.process || !window.require) {
@@ -25,7 +25,6 @@ class IpcManager {
     this.ipcRenderer = window.require('electron').ipcRenderer;
   }
 
-  // const testResponse: TestResponse = await ipcManager.sendOnce(new TestMessage());
   public sendOnce<T extends IProcessMessage, K extends IProcessResponse>(
     message: T
   ): Promise<K> {
@@ -41,10 +40,10 @@ class IpcManager {
             resolve(response);
           }
         );
-
-        this.ipcRenderer.send(message.getChannel(), message.getConfig());
+        message.setSequence(this.sequence);
+        this.ipcRenderer.send(message.getChannel(), message.getParams());
+        this.sequence++;
       } catch (e) {
-        // TOOD - Decide how to properly handle errors.
         reject(e);
       }
     });

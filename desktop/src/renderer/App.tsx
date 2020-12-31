@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  ITestMessageResponse,
-  TestMessage
-} from '../common/ipc/messages/TestMessage';
+import { ITestMessageResponse, TestMessage } from '../common/ipc';
 import IpcManager from './managers/IpcManager';
 
 function App() {
@@ -11,7 +8,7 @@ function App() {
   useEffect(() => {
     async function sendTest() {
       const response: ITestMessageResponse = await IpcManager.sendOnce(
-        new TestMessage('testing')
+        new TestMessage('testing message')
       );
       setMessage(response.message);
     }

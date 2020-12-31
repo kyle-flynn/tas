@@ -5,9 +5,6 @@ module.exports = [
     mode: 'development',
     devtool: 'source-map',
     resolve: {
-      alias: {
-        common$: path.resolve(__dirname, '../src/common')
-      },
       extensions: ['.json', '.js', '.ts', '.tsx']
     },
     entry: path.join(__dirname, '../src/main/index.ts'),

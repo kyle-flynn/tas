@@ -5,10 +5,11 @@ import {
   ITestMessageParams,
   ITestMessageResponse
 } from '../messages/TestMessage';
+import { Channel } from '../';
 
 export default class TestChannel extends ProcessChannel {
   public constructor() {
-    super('test');
+    super(Channel.TEST);
   }
 
   public handle(event: IpcMainEvent, params: ITestMessageParams): void {

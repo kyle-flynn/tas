@@ -18,9 +18,10 @@
       "isolatedModules": true,
       "noEmit": true,
       "jsx": "react",
-      "baseUrl": ".",
+      "baseUrl": "./src",
       "paths": {
-        "common": ["./src/common"]
+        "common/*": ["common/*"],
+        "ipc/*": ["common/ipc/*"]
       }
     },
     "include": [
