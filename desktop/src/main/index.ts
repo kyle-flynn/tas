@@ -1,9 +1,5 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import debug from 'electron-debug';
-import ProcessChannel, {
-  MessageCallback
-} from '../common/ipc/routes/ProcessRoute';
-import TestRoute from '../common/ipc/routes/TestRoute';
 
 const lock: boolean = app.requestSingleInstanceLock();
 let win: BrowserWindow;
@@ -15,14 +11,12 @@ function createWindow() {
     height: 720,
     width: 1280,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false
     },
     resizable: true,
     title: 'TAS - Desktop'
   });
-
-  // Initialize ipc channels.
-  initIpc([new TestRoute()]);
 
   win.show();
   win.loadURL('http://localhost:9090/');
@@ -33,16 +27,6 @@ function createWindow() {
     // @ts-ignore - Dereference window memory.
     win = null;
   });
-}
-
-function initIpc(channels: ProcessChannel[]) {
-  channels.forEach((channel: ProcessChannel) =>
-    channel
-      .getChannels()
-      .forEach((fn: MessageCallback<any>, channelName: string) => {
-        ipcMain.on(channelName, (event, request) => fn(event, request));
-      })
-  );
 }
 
 if (!lock) {

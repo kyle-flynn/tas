@@ -1,35 +1,35 @@
-const path = require('path');
+const path = require("path");
 
 module.exports = [
   {
-    mode: 'development',
-    devtool: 'source-map',
+    mode: "development",
+    devtool: "source-map",
     resolve: {
-      extensions: ['.json', '.js', '.ts', '.tsx']
+      extensions: [".json", ".js", ".ts", ".tsx"],
     },
-    entry: path.join(__dirname, '../src/main/index.ts'),
-    target: 'electron-main',
+    entry: path.join(__dirname, "../src/main/index.ts"),
+    target: "electron-main",
     output: {
-      path: path.join(__dirname, '../public'),
-      filename: 'main.js'
+      path: path.join(__dirname, "../public"),
+      filename: "main.js",
     },
     module: {
       rules: [
         {
           test: /\.ts(x?)$/,
           exclude: /node_modues/,
-          loader: 'ts-loader',
+          loader: "ts-loader",
           options: {
             transpileOnly: true,
-            experimentalWatchApi: true
-          }
+            experimentalWatchApi: true,
+          },
         },
         {
-          enforce: 'pre',
+          enforce: "pre",
           test: /\.js$/,
-          loader: 'source-map-loader'
-        }
-      ]
-    }
-  }
+          loader: "source-map-loader",
+        },
+      ],
+    },
+  },
 ];

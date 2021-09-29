@@ -1,25 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { ITestMessageResponse, TestMessage } from '../common/ipc';
-import IpcManager from './managers/IpcManager';
+import { FC } from 'react';
 
-function App() {
-  const [message, setMessage] = useState('');
-
-  useEffect(() => {
-    async function sendTest() {
-      const response: ITestMessageResponse = await IpcManager.sendOnce(
-        new TestMessage('testing message')
-      );
-      setMessage(response.message);
-    }
-    sendTest();
-  }, []);
-
-  return (
-    <div>
-      <p>{message}</p>
-    </div>
-  );
-}
+const App: FC = () => {
+  return <div>Hello, I am an app!</div>;
+};
 
 export default App;
